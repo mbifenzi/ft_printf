@@ -6,7 +6,7 @@
 /*   By: mbifenzi <mbifenzi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 13:47:54 by mbifenzi          #+#    #+#             */
-/*   Updated: 2020/02/15 21:50:22 by mbifenzi         ###   ########.fr       */
+/*   Updated: 2020/02/19 18:37:04 by mbifenzi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ int 	ft_printf(const char *format1, ...)
 				if (format[f->i] == 'd')
             	{
 					s = ft_itoa(va_arg(sick, int));
-					if(f->width || f->precision || f->minus)
+					if(f->width || f->precision || f->minus || f->no9ta)
+					{
 						ft_execute_flags_d(f, s);
+					}
 					else
 					{
 						if(*s == '0' && f->no9ta && !f->precision && f->zero);
@@ -109,14 +111,58 @@ int 	ft_printf(const char *format1, ...)
 					ft_execute_flags_s(f,s);
 					f->i++;
 				}
-				if (format[f->i] == 'x')
+				if (format[f->i] == 'x' || format[f->i] == 'X')
 				{
-					s = hexa(va_arg(sick, int));
-					ft_execute_flags_x(f, s);
+					s = hexa(va_arg(sick, int), format[f->i]);
+					if (f->preminus)
+					{
+						f->precision = 0;
+						f->no9ta = 0;
+					}
+					if (f->width || f->precision || f->no9ta || !f->zero || f->minus)
+						ft_execute_flags_x(f, s);
+					else
+					{ 
+							ft_putstr(s);		
+					}
+					
 					f->i++;
 				}
-			}
+				if (format[f->i] == 'u')
+				{
+					s = ft_utoa(va_arg(sick, unsigned int));
+					if (f->preminus)
+					{
+						f->precision = 0;
+						f->no9ta = 0;
+					}
+					ft_execute_flags_u(f,s);
+					f->i++;
+				}
+				if (format[f->i] == 'i')
+				{
+					s = ft_itoa(va_arg(sick, int));
+					if (f->preminus)
+					{
+						f->precision = 0;
+						f->no9ta = 0;
+					}
+					ft_execute_flags_i(f,s);
+					f->i++;
+				}
+				if (format[f->i] == 'p')
+				{
+					s = hexap(va_arg(sick, unsigned long long));
+					if (f->preminus)
+					{
+						f->precision = 0;
+						f->no9ta = 0;
+					}
+					ft_execute_flags_p(f,s);
+					f->i++;
+				}
             
+			}
 		}
 		
         /*
@@ -161,14 +207,15 @@ int 	ft_printf(const char *format1, ...)
 			}
 		}
 		*/
-		if (format[f->i])
-		{
-			ft_putchar(format[f->i]);
-			f->i++;
-		}
-    }
+			if (format[f->i])
+			{
+				ft_putchar(format[f->i]);
+				f->i++;
+			}
+    	}
 	return(g_count);
 }
+/*
 void	f(char *s)
 {
 	int i;
@@ -183,14 +230,12 @@ void	f(char *s)
 		i++;
 	}
 	printf("%d",a);
-}
+}*/
 /*
 int main()
 {
-	
-	ft_printf("%10.7d.\n", -100);
-
+	ft_printf("%d-%s--%u.\n", 10, "simo", 11);
 	//ft_printf("%d\n", ft_printf("%02.7d", 100));
-	printf("%10.7d", -100);
+	printf("%d-%s--%u", 10, "simo", 11);
 	//printf("%d" , printf("%-2s", "simo"));
 }*/

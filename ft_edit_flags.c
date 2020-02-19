@@ -6,7 +6,7 @@
 /*   By: mbifenzi <mbifenzi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/22 18:20:09 by mbifenzi          #+#    #+#             */
-/*   Updated: 2020/02/15 00:30:53 by mbifenzi         ###   ########.fr       */
+/*   Updated: 2020/02/17 23:07:51 by mbifenzi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,25 @@ void    ft_width(char *format, t_f *f,va_list sick)
 	}
 	else if(format[f->i] == '*')
 	{
+		
 		f->width = va_arg(sick, int);
 		if (f->minus == 0)
 			f->minus = (f->width < 0) ? 1 : 0;
-		f->width = (f->width < 0) ? -f->width : f->width;
-		
-	
+		if (f->width < 0)
+		{
+			f->width = -f->width;
+			f->zero = 0;
 			f->i++;
-
+		}
+		else
+		{
+			f->width = f->width;
+			f->i++;
+		}
+		
+		/*f->width = (f->width < 0) ? -f->width : f->width;
+			f->zero = 0;
+			f->i++;*/
 	}
 }
 

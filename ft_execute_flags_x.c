@@ -6,14 +6,14 @@
 /*   By: mbifenzi <mbifenzi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 18:50:27 by mbifenzi          #+#    #+#             */
-/*   Updated: 2020/02/10 00:38:32 by mbifenzi         ###   ########.fr       */
+/*   Updated: 2020/02/18 21:18:18 by mbifenzi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 void    ft_execute_flags_x(t_f *f, char *s)
-{
+{ //printf("%d", f->preminus);
     int len;
     int bonus;
     int a;
@@ -21,9 +21,21 @@ void    ft_execute_flags_x(t_f *f, char *s)
     bonus = 0;
     a = f->precision;
     len = ft_strlen(s);
+    if(!f->precision && !f->width && !f->no9ta && !f->minus)
+        ft_putstr(s);
+    if (f->no9ta && !f->precision && *s == '0')
+    {   if (f->width)
+            *s = ' ';
+        else
+        {
+            *s = 0;
+        }
+        
+    }
     if(f->minus == 1)
     {
         bonus = 1;
+        
         ft_minus_x(f, s, len);
     }
     if (f->width)
@@ -56,16 +68,24 @@ void    ft_width_x( t_f *f ,char *s, int len)
     {
         while (f->width > f->precision && f->width > len)
         {
-            ft_putchar(' ');
+            if (!f->no9ta)
+            {
+            ft_putchar('0');
             f->width--;
+            }
+            if (f->no9ta)
+            {
+                ft_putchar(' ');
+                f->width--;
+            }
         }
     }
     else
     {
         while (f->width > len && f->width > f->precision)
-        {
-            ft_putchar('0');
-            f->width--;
+        {       
+                ft_putchar('0');
+                f->width--;
         }
     }
     if(!f->no9ta && !f->minus)
